@@ -4,8 +4,10 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 
 class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
@@ -43,12 +45,21 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
         if (markerData == null) return
         map.clear()
 
+        val boundsBuilder = LatLngBounds.Builder()
+
         for (i in 0 until markerData.size()) {
             val marker = markerData.getMap(i)
             val position = LatLng(marker?.getDouble("latitude") ?: 0.0, marker?.getDouble("longitude") ?: 0.0)
             val title = marker?.getString("title") ?: ""
             val description = marker?.getString("description") ?: ""
+
             map.addMarker(MarkerOptions().position(position).title(title).snippet(description))
+
+            boundsBuilder.include(position)
         }
+
+        val bounds = boundsBuilder.build()
+        val padding = 100
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
     }
 }
