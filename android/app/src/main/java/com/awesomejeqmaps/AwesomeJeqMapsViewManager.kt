@@ -8,13 +8,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
-    private var googleMap: com.google.android.gms.maps.GoogleMap? = null
+    private var googleMap: GoogleMap? = null
     private lateinit var reactContext: ThemedReactContext
 
     override fun getName(): String {
@@ -40,6 +42,18 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
                         .receiveEvent(mapView.id, "topMapTap", event)
                 }
 
+                map.setOnMarkerClickListener { marker ->
+                    val event: WritableMap = Arguments.createMap().apply {
+                        putDouble("latitude", marker.position.latitude)
+                        putDouble("longitude", marker.position.longitude)
+                        putString("title", marker.title)
+                    }
+                    reactContext.getJSModule(RCTEventEmitter::class.java)
+                        .receiveEvent(mapView.id, "topMarkerClick", event)
+
+                    true
+                }
+
                 addMarkersToMap(map, pendingMarkerData)
             }
         }
@@ -57,7 +71,7 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
         }
     }
 
-    private fun addMarkersToMap(map: com.google.android.gms.maps.GoogleMap, markerData: ReadableArray?) {
+    private fun addMarkersToMap(map: GoogleMap, markerData: ReadableArray?) {
         if (markerData == null) return
         map.clear()
 
@@ -85,7 +99,8 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
 
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any>? {
         return mapOf(
-            "topMapTap" to mapOf("registrationName" to "onMapTap") // Registrar el evento `topMapTap`
+            "topMapTap" to mapOf("registrationName" to "onMapTap"),
+            "topMarkerClick" to mapOf("registrationName" to "onMarkerClick")
         )
     }
 }

@@ -5,6 +5,12 @@ export type MapTapEvent = NativeSyntheticEvent<{
   longitude: number;
 }>;
 
+export type MarkerClickEvent = NativeSyntheticEvent<{
+  latitude: number;
+  longitude: number;
+  title: string;
+}>;
+
 interface AwesomeJeqMapsViewProps {
   markerData: {
     latitude: number;
@@ -15,6 +21,7 @@ interface AwesomeJeqMapsViewProps {
   style?: ViewStyle;
 
   onMapTap?: (event: MapTapEvent) => void;
+  onMarkerClick?: (event: MarkerClickEvent) => void;
 }
 
 const AwesomeJeqMapsView = requireNativeComponent<AwesomeJeqMapsViewProps>('AwesomeJeqMapsView');

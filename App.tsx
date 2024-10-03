@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Button } from 'react-native';
-import { AwesomeJeqMaps, AwesomeJeqMapsView, MapTapEvent } from './libs/AwesomeJeqMaps';
+import { AwesomeJeqMaps, AwesomeJeqMapsView, MapTapEvent, MarkerClickEvent } from './libs/AwesomeJeqMaps';
 
 const App: React.FC = () => {
   const [showMap, setShowMap] = useState(false);
@@ -11,8 +11,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     AwesomeJeqMaps.initializeMap()
-      .then((response: string) => console.log({response}))
-      .catch((error: any) => console.error({error}));
+      .then((response: string) => console.log({ response }))
+      .catch((error: any) => console.error({ error }));
   }, []);
 
   const handleMapTap = (event: MapTapEvent) => {
@@ -26,6 +26,11 @@ const App: React.FC = () => {
     setMarkerData([...markerData, newMarker]);
   };
 
+  const handleMarkerClick = (event: MarkerClickEvent) => {
+    const { latitude, longitude, title } = event.nativeEvent;
+    setMarkerData(markerData.filter(marker => !(marker.latitude === latitude && marker.longitude === longitude && marker.title === title)));
+  };
+
   return (
     <View style={styles.container}>
       <Button title="Mostrar Mapa" onPress={() => setShowMap(true)} />
@@ -34,6 +39,7 @@ const App: React.FC = () => {
           style={styles.map}
           markerData={markerData}
           onMapTap={handleMapTap}
+          onMarkerClick={handleMarkerClick}
         />
       )}
     </View>
