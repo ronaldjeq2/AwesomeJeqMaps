@@ -50,7 +50,6 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
                     }
                     reactContext.getJSModule(RCTEventEmitter::class.java)
                         .receiveEvent(mapView.id, "topMarkerClick", event)
-
                     true
                 }
 
@@ -75,6 +74,8 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
         if (markerData == null) return
         map.clear()
 
+        if (markerData.size() == 0) return
+
         val boundsBuilder = LatLngBounds.Builder()
 
         for (i in 0 until markerData.size()) {
@@ -88,9 +89,11 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
             boundsBuilder.include(position)
         }
 
-        val bounds = boundsBuilder.build()
-        val padding = 100
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        if (markerData.size() > 0) {
+            val bounds = boundsBuilder.build()
+            val padding = 100
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        }
     }
 
     private fun addMarkerAtPosition(position: LatLng) {
