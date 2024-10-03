@@ -1,4 +1,9 @@
-import { NativeModules, requireNativeComponent, ViewStyle } from 'react-native';
+import { NativeModules, requireNativeComponent, ViewStyle, NativeSyntheticEvent } from 'react-native';
+
+export type MapTapEvent = NativeSyntheticEvent<{
+  latitude: number;
+  longitude: number;
+}>;
 
 interface AwesomeJeqMapsViewProps {
   markerData: {
@@ -8,6 +13,8 @@ interface AwesomeJeqMapsViewProps {
     description: string;
   }[];
   style?: ViewStyle;
+
+  onMapTap?: (event: MapTapEvent) => void;
 }
 
 const AwesomeJeqMapsView = requireNativeComponent<AwesomeJeqMapsViewProps>('AwesomeJeqMapsView');
