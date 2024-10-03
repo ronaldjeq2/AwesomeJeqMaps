@@ -3,7 +3,6 @@ import { View, StyleSheet, Button } from 'react-native';
 import { AwesomeJeqMaps, AwesomeJeqMapsView, MapTapEvent, MarkerClickEvent } from './libs/AwesomeJeqMaps';
 
 const App: React.FC = () => {
-  const [showMap, setShowMap] = useState(false);
   const [markerData, setMarkerData] = useState([
     { latitude: 37.78825, longitude: -122.4324, title: 'Marcador 1', description: 'Descripción del Marcador 1' },
     { latitude: 37.75825, longitude: -122.4624, title: 'Marcador 2', description: 'Descripción del Marcador 2' },
@@ -33,15 +32,12 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Button title="Mostrar Mapa" onPress={() => setShowMap(true)} />
-      {showMap && (
         <AwesomeJeqMapsView
           style={styles.map}
           markerData={markerData}
           onMapTap={handleMapTap}
           onMarkerClick={handleMarkerClick}
         />
-      )}
     </View>
   );
 };
@@ -53,8 +49,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   map: {
-    width: '80%',
-    height: '80%',
+    width: '100%',
+    height: '100%',
   },
 });
 
