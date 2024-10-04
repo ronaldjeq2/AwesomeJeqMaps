@@ -14,13 +14,13 @@ const App: React.FC = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: 'Inicio de Sesión' }}
+          options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="Map"
           component={MapScreen}
-          options={{ title: 'Mapa y Lista' }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
