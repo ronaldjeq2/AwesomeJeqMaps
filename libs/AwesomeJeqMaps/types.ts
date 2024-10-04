@@ -1,20 +1,20 @@
-import { NativeSyntheticEvent, ViewStyle } from 'react-native';
-
-// Definir el tipo de evento para el clic en los marcadores
-export type MarkerClickEvent = NativeSyntheticEvent<{
-  latitude: number;
-  longitude: number;
-  title: string;
-}>;
-
-export interface AwesomeJeqMapsViewProps {
-  markerData: {
+export type MarkerClickEvent = {
+  nativeEvent: {
     latitude: number;
     longitude: number;
     title: string;
-    description: string;
-  }[];
-  style?: ViewStyle;
+  };
+};
 
+export type MarkerDataType = {
+  title: string;
+  latitude: number;
+  longitude: number;
+  description: string;
+};
+
+export type AwesomeJeqMapsViewProps = {
+  markerData?: MarkerDataType[];
   onMarkerClick?: (event: MarkerClickEvent) => void;
-}
+  style?: object;
+};

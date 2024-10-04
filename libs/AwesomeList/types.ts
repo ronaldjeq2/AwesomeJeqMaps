@@ -1,5 +1,15 @@
-export type AwesomeListViewProps = {
-    data: { title: string; image: string }[];
-    style?: object;
+export type RecyclerViewDataType = {
+    title: string;
+    latitude: number;
+    longitude: number;
+    description: string;
+    image: string;
+    id: string;
   };
-  
+
+export type AwesomeListViewProps = {
+    data: RecyclerViewDataType[];
+    style?: object;
+    selectedId: string | null;
+  };
+

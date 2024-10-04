@@ -1,63 +1,93 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { AwesomeJeqMaps, AwesomeJeqMapsView, MarkerClickEvent } from './libs/AwesomeJeqMaps';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, NativeSyntheticEvent } from 'react-native';
+import { AwesomeJeqMapsView, MarkerClickEvent } from './libs/AwesomeJeqMaps';
 import { AwesomeListView } from './libs/AwesomeList';
 
+const data = [
+  {
+    title: 'Lugar 1',
+    latitude: 37.78825,
+    longitude: -122.4324,
+    description: 'Descripción del lugar 1',
+    image: 'https://example.com/image1.jpg',
+    id: '1'
+  },
+  {
+    title: 'Lugar 2',
+    latitude: 37.75825,
+    longitude: -122.4624,
+    description: 'Descripción del lugar 2',
+    image: 'https://example.com/image2.jpg',
+    id: '2'
+  },
+  {
+    title: 'Lugar 3',
+    latitude: 37.74825,
+    longitude: -122.4224,
+    description: 'Descripción del lugar 3',
+    image: 'https://example.com/image3.jpg',
+    id: '3'
+  },
+  {
+    title: 'Lugar 4',
+    latitude: 37.76825,
+    longitude: -122.4224,
+    description: 'Descripción del lugar 3',
+    image: 'https://example.com/image3.jpg',
+    id: '34'
+  }
+];
+
 const App: React.FC = () => {
-  const [markerData, setMarkerData] = useState([
-    { latitude: 37.78825, longitude: -122.4324, title: 'Marcador 1', description: 'Descripción del Marcador 1' },
-    { latitude: 37.75825, longitude: -122.4624, title: 'Marcador 2', description: 'Descripción del Marcador 2' },
-  ]);
-  const data = [
-    { title: 'Pizza', image: 'https://www.caracteristicass.de/wp-content/uploads/2023/02/imagenes-artisticas.jpg' },
-    { title: 'Burger', image: 'https://www.caracteristicass.de/wp-content/uploads/2023/02/imagenes-artisticas.jpg' },
-    { title: 'Pasta', image: 'https://www.caracteristicass.de/wp-content/uploads/2023/02/imagenes-artisticas.jpg' },
-  ];
-  useEffect(() => {
-    AwesomeJeqMaps.initializeMap()
-      .then((response: string) => console.log({ response }))
-      .catch((error: any) => console.error({ error }));
-  }, []);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const listRef = useRef<React.ElementRef<typeof AwesomeListView>>(null);
 
   const handleMarkerClick = (event: MarkerClickEvent) => {
     const { latitude, longitude, title } = event.nativeEvent;
-    //setMarkerData(markerData.filter(marker => !(marker.latitude === latitude && marker.longitude === longitude && marker.title === title)));
+
+    const selectedItem = data.find(
+      item => item.latitude === latitude && item.longitude === longitude && item.title === title
+    );
+
+    if (selectedItem) {
+      setSelectedId(selectedItem.id);
+    }
   };
 
   return (
     <View style={styles.container}>
       <AwesomeJeqMapsView
         style={styles.map}
-        markerData={markerData}
+        markerData={data} 
         onMarkerClick={handleMarkerClick}
       />
-     <View style={styles.container2}>
-      <AwesomeListView style={styles.list} data={data} />
-    </View>
+
+      <AwesomeListView
+        ref={listRef} 
+        style={styles.list}
+        data={data}
+        selectedId={selectedId}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height:'100%',
-    width: '100%',
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
-    position: 'relative'
+    backgroundColor: '#f2f2f2',
   },
   map: {
     width: '100%',
     height: '100%',
   },
   list: {
-    width: 300,
+    width: '100%',
     height: 120,
-  },
-  container2: {
     position: 'absolute',
-    bottom: 30
-  }
+    bottom: 30,
+  },
 });
 
 export default App;
