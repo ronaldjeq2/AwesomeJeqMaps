@@ -1,57 +1,54 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { LoginScreenProps } from '../types/navigation';
+import { View, Text, Button } from 'react-native';
+import { styles } from './LoginScreen.styles';
+import { Controller } from 'react-hook-form';
+import { Input } from '@rneui/themed';
+import { useLoginForm } from '../hooks/useLoginForm';
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  const handleLogin = () => {
-    if (username === 'user' && password === 'password') {
-      navigation.navigate('Map');
-    } else {
-      //alert('Credenciales incorrectas. Inténtalo de nuevo.');
-    }
-  };
+export const LoginScreen: React.FC = () => {
+  const { control, handleSubmit, errors, onSubmit } = useLoginForm();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inicio de Sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre de usuario"
-        value={username}
-        onChangeText={setUsername}
+
+      <Controller
+        control={control}
+        name="username"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            inputContainerStyle={styles.input}
+            placeholder="Nombre de usuario"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            errorMessage={errors?.username?.message}
+          />
+        )}
+        rules={{ required: 'El nombre de usuario es obligatorio' }}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            inputContainerStyle={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            errorMessage='La contraseña es obligatoria'
+          />
+        )}
+        rules={{ required: 'La contraseña es obligatoria' }}
       />
-      <Button title="Iniciar Sesión" onPress={handleLogin} />
+      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+
+      <View style={styles.button}>
+        <Button title="Iniciar Sesión" onPress={handleSubmit(onSubmit)} />
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f2f2f2',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    width: '80%',
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-});
