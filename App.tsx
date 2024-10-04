@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   list: {
-    width: 400,
-    height: 400,
+    width: 300,
+    height: 120,
   },
   container2: {
     position: 'absolute',
-    bottom: 120
+    bottom: 30
   }
 });
 

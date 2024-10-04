@@ -1,8 +1,10 @@
 package com.awesomejeqmaps
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +13,8 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+
+data class ListItem(val title: String, val image: String)
 
 class AwesomeListViewManager : SimpleViewManager<RecyclerView>() {
 
@@ -24,9 +28,11 @@ class AwesomeListViewManager : SimpleViewManager<RecyclerView>() {
 
     override fun createViewInstance(reactContext: ThemedReactContext): RecyclerView {
         this.reactContext = reactContext
+
         recyclerView = RecyclerView(reactContext)
-        recyclerView.layoutManager = LinearLayoutManager(reactContext)
+        recyclerView.layoutManager = LinearLayoutManager(reactContext, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = ListAdapter(items, reactContext)
+
         return recyclerView
     }
 
@@ -44,16 +50,12 @@ class AwesomeListViewManager : SimpleViewManager<RecyclerView>() {
         }
     }
 
-
-    data class ListItem(val title: String, val image: String)
-
-
-    class ListAdapter(private val items: List<ListItem>, private val context: ThemedReactContext) :
+    class ListAdapter(private val items: List<ListItem>, private val context: Context) :
         RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
-        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item, parent, false)
+                .inflate(R.layout.list_item_horizontal, parent, false)
             return ViewHolder(view)
         }
 
@@ -67,7 +69,7 @@ class AwesomeListViewManager : SimpleViewManager<RecyclerView>() {
             return items.size
         }
 
-        class ViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val title: TextView = itemView.findViewById(R.id.item_title)
             val image: ImageView = itemView.findViewById(R.id.item_image)
         }
