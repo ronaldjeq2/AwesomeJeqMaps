@@ -12,7 +12,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
@@ -31,17 +30,6 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
             this.googleMap = googleMap
 
             googleMap?.let { map ->
-                map.setOnMapClickListener { latLng ->
-                    addMarkerAtPosition(latLng)
-
-                    val event: WritableMap = Arguments.createMap().apply {
-                        putDouble("latitude", latLng.latitude)
-                        putDouble("longitude", latLng.longitude)
-                    }
-                    reactContext.getJSModule(RCTEventEmitter::class.java)
-                        .receiveEvent(mapView.id, "topMapTap", event)
-                }
-
                 map.setOnMarkerClickListener { marker ->
                     val event: WritableMap = Arguments.createMap().apply {
                         putDouble("latitude", marker.position.latitude)
@@ -96,13 +84,8 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
         }
     }
 
-    private fun addMarkerAtPosition(position: LatLng) {
-        googleMap?.addMarker(MarkerOptions().position(position).title("Nuevo Marcador"))
-    }
-
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any>? {
         return mapOf(
-            "topMapTap" to mapOf("registrationName" to "onMapTap"),
             "topMarkerClick" to mapOf("registrationName" to "onMarkerClick")
         )
     }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
-import { AwesomeJeqMaps, AwesomeJeqMapsView, MapTapEvent, MarkerClickEvent } from './libs/AwesomeJeqMaps';
+import { View, StyleSheet } from 'react-native';
+import { AwesomeJeqMaps, AwesomeJeqMapsView, MarkerClickEvent } from './libs/AwesomeJeqMaps';
 
 const App: React.FC = () => {
   const [markerData, setMarkerData] = useState([
@@ -14,17 +14,6 @@ const App: React.FC = () => {
       .catch((error: any) => console.error({ error }));
   }, []);
 
-  const handleMapTap = (event: MapTapEvent) => {
-    const { latitude, longitude } = event.nativeEvent;
-    const newMarker = {
-      latitude,
-      longitude,
-      title: `Nuevo Marcador`,
-      description: `Marcador agregado en: ${latitude}, ${longitude}`,
-    };
-    setMarkerData([...markerData, newMarker]);
-  };
-
   const handleMarkerClick = (event: MarkerClickEvent) => {
     const { latitude, longitude, title } = event.nativeEvent;
     setMarkerData(markerData.filter(marker => !(marker.latitude === latitude && marker.longitude === longitude && marker.title === title)));
@@ -32,12 +21,11 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-        <AwesomeJeqMapsView
-          style={styles.map}
-          markerData={markerData}
-          onMapTap={handleMapTap}
-          onMarkerClick={handleMarkerClick}
-        />
+      <AwesomeJeqMapsView
+        style={styles.map}
+        markerData={markerData}
+        onMarkerClick={handleMarkerClick}
+      />
     </View>
   );
 };
