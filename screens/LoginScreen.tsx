@@ -6,7 +6,7 @@ import { Input } from '@rneui/themed';
 import { useLoginForm } from '../hooks/useLoginForm';
 
 export const LoginScreen: React.FC = () => {
-  const { control, handleSubmit, errors, onSubmit } = useLoginForm();
+  const { control, handleSubmit, errors, onSubmit, loginError } = useLoginForm();
 
   return (
     <View style={styles.container}>
@@ -39,12 +39,13 @@ export const LoginScreen: React.FC = () => {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            errorMessage='La contraseña es obligatoria'
+            errorMessage={errors?.password?.message}
           />
         )}
         rules={{ required: 'La contraseña es obligatoria' }}
       />
-      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+
+      {loginError && <Text style={styles.errorText}>{loginError}</Text>}
 
       <View style={styles.button}>
         <Button title="Iniciar Sesión" onPress={handleSubmit(onSubmit)} />

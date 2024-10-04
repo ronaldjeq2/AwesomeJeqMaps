@@ -1,4 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { LoginScreenProps } from '../types/navigation';
 
@@ -17,13 +19,23 @@ export const useLoginForm = () => {
 
   const navigation = useNavigation<LoginScreenProps['navigation']>();
 
-  const onSubmit = ({ username, password }: FormValues) => {
-    if (username === 'user' && password === 'password') {
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const onSubmit: SubmitHandler<FormValues> = async ({ username, password }) => {
+    setLoginError(null);
+    try {
+      await auth().signInWithEmailAndPassword(username, password);
       navigation.navigate('Map');
-    } else {
-      //alert('Credenciales incorrectas. Inténtalo de nuevo.');
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found') {
+        setLoginError('El usuario no existe. Por favor, regístrate primero.');
+      } else if (error.code === 'auth/wrong-password') {
+        setLoginError('Contraseña incorrecta. Inténtalo de nuevo.');
+      } else {
+        setLoginError('Error de autenticación. Revisa tus credenciales e inténtalo de nuevo.');
+      }
     }
   };
 
-  return { control, handleSubmit, errors, onSubmit };
+  return { control, handleSubmit, errors, onSubmit, loginError };
 };

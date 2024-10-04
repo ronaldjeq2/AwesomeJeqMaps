@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "426893556800",
+    "project_id": "awesomejeqmaps-2433e",
+    "storage_bucket": "awesomejeqmaps-2433e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426893556800:android:69af20f0b368395196f3a5",
+        "android_client_info": {
+          "package_name": "com.awesomejeqmaps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbDN2YtKNjjYSmYl9hxw_NGv3BrXRgPrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
