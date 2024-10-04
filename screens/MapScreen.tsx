@@ -6,20 +6,20 @@ import { useMapScreen } from '../hooks/useMapScreen';
 import { styles } from './MapScreen.styles';
 
 export const MapScreen: React.FC = () => {
-  const { data, selectedId, handleMarkerClick, listRef } = useMapScreen();
+  const { benefits, selectedId, handleMarkerClick, listRef } = useMapScreen();
 
   return (
     <View style={styles.container}>
       <AwesomeJeqMapsView
         style={styles.map}
-        markerData={data}
+        markerData={benefits}
         onMarkerClick={handleMarkerClick}
       />
 
       <AwesomeListView
         ref={listRef}
         style={styles.list}
-        data={data}
+        data={benefits}
         selectedId={selectedId}
       />
     </View>

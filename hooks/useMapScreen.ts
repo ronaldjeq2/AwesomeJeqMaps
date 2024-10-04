@@ -1,30 +1,32 @@
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AwesomeListView } from '../libs/AwesomeList';
 import { MarkerClickEvent } from '../libs/AwesomeJeqMaps';
+import { Benefit } from '../services/benefits/benefit.model';
+import { getBenefits } from '../services/benefits/benefit.service';
 
-type DataItem = {
-  title: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  image: string;
-  id: string;
-};
 
 export const useMapScreen = () => {
+  const [benefits, setBenefits] = useState<Benefit[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const listRef = useRef<React.ElementRef<typeof AwesomeListView>>(null);
 
-  const data: DataItem[] = [
-    { title: 'Lugar 1', latitude: 37.78825, longitude: -122.4324, description: 'Descripción del lugar 1', image: 'https://example.com/image1.jpg', id: '1' },
-    { title: 'Lugar 2', latitude: 37.75825, longitude: -122.4624, description: 'Descripción del lugar 2', image: 'https://example.com/image2.jpg', id: '2' },
-    { title: 'Lugar 3', latitude: 37.76825, longitude: -122.4224, description: 'Descripción del lugar 3', image: 'https://example.com/image3.jpg', id: '3' },
-  ];
+  useEffect(() => {
+    const fetchBenefits = async () => {
+      try {
+        const data = await getBenefits();
+        setBenefits(data);
+      } catch (error) {
+        console.error('Error al obtener los beneficios:', error);
+      }
+    };
+
+    fetchBenefits();
+  }, []);
 
   const handleMarkerClick = (event: MarkerClickEvent) => {
     const { latitude, longitude, title } = event.nativeEvent;
 
-    const selectedItem = data.find(
+    const selectedItem = benefits.find(
       item => item.latitude === latitude && item.longitude === longitude && item.title === title
     );
 
@@ -34,7 +36,7 @@ export const useMapScreen = () => {
   };
 
   return {
-    data,
+    benefits,
     selectedId,
     setSelectedId,
     handleMarkerClick,
