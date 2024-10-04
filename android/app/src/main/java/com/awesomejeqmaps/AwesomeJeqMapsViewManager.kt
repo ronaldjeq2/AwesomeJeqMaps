@@ -32,6 +32,10 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
             googleMap?.let { map ->
                 map.setOnMarkerClickListener { marker ->
                     marker.showInfoWindow()
+                    val zoomLevel = map.cameraPosition.zoom + 2
+                    val cameraUpdate = CameraUpdateFactory.newLatLngZoom(marker.position, zoomLevel)
+                    map.animateCamera(cameraUpdate)
+
                     val event: WritableMap = Arguments.createMap().apply {
                         putDouble("latitude", marker.position.latitude)
                         putDouble("longitude", marker.position.longitude)
