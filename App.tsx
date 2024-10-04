@@ -1,93 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, NativeSyntheticEvent } from 'react-native';
-import { AwesomeJeqMapsView, MarkerClickEvent } from './libs/AwesomeJeqMaps';
-import { AwesomeListView } from './libs/AwesomeList';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LoginScreen } from './screens/LoginScreen';
+import { MapScreen } from './screens/MapScreen';
+import { RootStackParamList } from './types/navigation';
 
-const data = [
-  {
-    title: 'Lugar 1',
-    latitude: 37.78825,
-    longitude: -122.4324,
-    description: 'Descripción del lugar 1',
-    image: 'https://example.com/image1.jpg',
-    id: '1'
-  },
-  {
-    title: 'Lugar 2',
-    latitude: 37.75825,
-    longitude: -122.4624,
-    description: 'Descripción del lugar 2',
-    image: 'https://example.com/image2.jpg',
-    id: '2'
-  },
-  {
-    title: 'Lugar 3',
-    latitude: 37.74825,
-    longitude: -122.4224,
-    description: 'Descripción del lugar 3',
-    image: 'https://example.com/image3.jpg',
-    id: '3'
-  },
-  {
-    title: 'Lugar 4',
-    latitude: 37.76825,
-    longitude: -122.4224,
-    description: 'Descripción del lugar 3',
-    image: 'https://example.com/image3.jpg',
-    id: '34'
-  }
-];
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const listRef = useRef<React.ElementRef<typeof AwesomeListView>>(null);
-
-  const handleMarkerClick = (event: MarkerClickEvent) => {
-    const { latitude, longitude, title } = event.nativeEvent;
-
-    const selectedItem = data.find(
-      item => item.latitude === latitude && item.longitude === longitude && item.title === title
-    );
-
-    if (selectedItem) {
-      setSelectedId(selectedItem.id);
-    }
-  };
-
   return (
-    <View style={styles.container}>
-      <AwesomeJeqMapsView
-        style={styles.map}
-        markerData={data} 
-        onMarkerClick={handleMarkerClick}
-      />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: 'Inicio de Sesión' }}
+        />
 
-      <AwesomeListView
-        ref={listRef} 
-        style={styles.list}
-        data={data}
-        selectedId={selectedId}
-      />
-    </View>
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ title: 'Mapa y Lista' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#f2f2f2',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  list: {
-    width: '100%',
-    height: 120,
-    position: 'absolute',
-    bottom: 30,
-  },
-});
 
 export default App;
