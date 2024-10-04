@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   const handleMarkerClick = (event: MarkerClickEvent) => {
     const { latitude, longitude, title } = event.nativeEvent;
-    setMarkerData(markerData.filter(marker => !(marker.latitude === latitude && marker.longitude === longitude && marker.title === title)));
+    //setMarkerData(markerData.filter(marker => !(marker.latitude === latitude && marker.longitude === longitude && marker.title === title)));
   };
 
   return (

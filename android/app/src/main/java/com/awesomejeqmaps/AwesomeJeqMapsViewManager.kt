@@ -31,6 +31,7 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
 
             googleMap?.let { map ->
                 map.setOnMarkerClickListener { marker ->
+                    marker.showInfoWindow()
                     val event: WritableMap = Arguments.createMap().apply {
                         putDouble("latitude", marker.position.latitude)
                         putDouble("longitude", marker.position.longitude)
@@ -70,9 +71,8 @@ class AwesomeJeqMapsViewManager : SimpleViewManager<MapView>() {
             val marker = markerData.getMap(i)
             val position = LatLng(marker?.getDouble("latitude") ?: 0.0, marker?.getDouble("longitude") ?: 0.0)
             val title = marker?.getString("title") ?: ""
-            val description = marker?.getString("description") ?: ""
 
-            map.addMarker(MarkerOptions().position(position).title(title).snippet(description))
+            map.addMarker(MarkerOptions().position(position).title(title))
 
             boundsBuilder.include(position)
         }
